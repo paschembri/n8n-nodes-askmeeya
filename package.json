@@ -31,7 +31,7 @@
     "n8nNodesApiVersion": 1,
     "strict": true,
     "credentials": [
-      "dist/credentials/AskmeeyaOAuth2Api.credentials.js"
+      "dist/credentials/AskmeeyaApi.credentials.js"
     ],
     "nodes": [
       "dist/nodes/Askmeeya/Askmeeya.node.js"

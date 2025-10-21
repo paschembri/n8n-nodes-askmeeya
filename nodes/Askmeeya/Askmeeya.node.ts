@@ -18,7 +18,7 @@ export class Askmeeya implements INodeType {
 		usableAsTool: true,
 		inputs: ['main'],
 		outputs: ['main'],
-		credentials: [{ name: 'askmeeyaOAuth2Api', required: true }],
+		credentials: [{ name: 'askmeeyaApi', required: true }],
 		requestDefaults: {
 			baseURL: '={{$credentials.apiUrl}}',
 			headers: {
