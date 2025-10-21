@@ -19,7 +19,7 @@ export const documentDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'POST',
-						url: '/api/documents/',
+						url: '/meeya/documents/',
 						headers: {
 							'Content-Type': 'multipart/form-data',
 						},
@@ -39,7 +39,7 @@ export const documentDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'DELETE',
-						url: '/api/documents/',
+						url: '/meeya/documents/',
 						body: {
 							id: '={{$parameter.documentId}}',
 						},
@@ -53,7 +53,7 @@ export const documentDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'GET',
-						url: '=/api/documents/{{$parameter.documentId}}/',
+						url: '=/meeya/documents/{{$parameter.documentId}}/',
 					},
 				},
 			},
@@ -64,7 +64,7 @@ export const documentDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'GET',
-						url: '/api/documents/',
+						url: '/meeya/documents/',
 					},
 				},
 			},
@@ -75,7 +75,7 @@ export const documentDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'PATCH',
-						url: '/api/documents/',
+						url: '/meeya/documents/',
 						body: {
 							id: '={{$parameter.documentId}}',
 							title: '={{$parameter.title}}',

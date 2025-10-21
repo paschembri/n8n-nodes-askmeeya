@@ -19,7 +19,7 @@ export const projectDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'GET',
-						url: '/api/projects/',
+						url: '/meeya/projects/',
 					},
 				},
 			},
@@ -30,7 +30,7 @@ export const projectDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'POST',
-						url: '/api/projects/',
+						url: '/meeya/projects/',
 						body: {
 							name: '={{$parameter.name}}',
 						},
@@ -44,7 +44,7 @@ export const projectDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'PATCH',
-						url: '/api/projects/',
+						url: '/meeya/projects/',
 						body: {
 							project_id: '={{$parameter.projectId}}',
 							name: '={{$parameter.name}}',
@@ -59,7 +59,7 @@ export const projectDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'DELETE',
-						url: '/api/projects/',
+						url: '/meeya/projects/',
 						body: {
 							project_id: '={{$parameter.projectId}}',
 						},

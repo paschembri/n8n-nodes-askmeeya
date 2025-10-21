@@ -19,7 +19,7 @@ export const folderDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'GET',
-						url: '/api/folders/',
+						url: '/meeya/folders/',
 					},
 				},
 			},
@@ -30,7 +30,7 @@ export const folderDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'POST',
-						url: '/api/folders/',
+						url: '/meeya/folders/',
 						body: {
 							name: '={{$parameter.name}}',
 							parent_id: '={{$parameter.parentId}}',
@@ -45,7 +45,7 @@ export const folderDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'PATCH',
-						url: '/api/folders/',
+						url: '/meeya/folders/',
 						body: {
 							folder: '={{$parameter.folderId}}',
 							name: '={{$parameter.name}}',
@@ -60,7 +60,7 @@ export const folderDescription: INodeProperties[] = [
 				routing: {
 					request: {
 						method: 'DELETE',
-						url: '/api/folders/',
+						url: '/meeya/folders/',
 						body: {
 							folder: '={{$parameter.folderId}}',
 						},
