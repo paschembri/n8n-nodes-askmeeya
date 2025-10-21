@@ -77,6 +77,8 @@ export class AskmeeyaApi implements ICredentialType {
 					body: {
 						grant_type: 'http://auth0.com/oauth/grant-type/password-realm',
 						realm: 'Username-Password-Authentication',
+						clientId: '={{$credentials.clientId}}',
+						clientSecret: '={{$credentials.clientSecret}}',
 						username: '={{$credentials.username}}',
 						password: '={{$credentials.password}}',
 						audience: '={{$credentials.audience}}',
