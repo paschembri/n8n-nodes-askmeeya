@@ -14,7 +14,7 @@ export class AskmeeyaApi implements ICredentialType {
   // ✅ Fix: Icon must be an object in your version
   icon: Icon = {
     light: 'file:askmeeya.svg',
-    dark: 'file:askmeeya.svg',
+    dark: 'file:askmeeya.dark.svg',
   };
 
   properties: INodeProperties[] = [
