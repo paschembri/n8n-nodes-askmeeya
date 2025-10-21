@@ -1,9 +1,10 @@
-import type { IAuthenticate, ICredentialTestRequest, ICredentialType, INodeProperties } from 'n8n-workflow';
+import type { IAuthenticate, ICredentialTestRequest, ICredentialType, INodeProperties, Icon } from 'n8n-workflow';
 
 export class AskmeeyaApi implements ICredentialType {
 	name = 'askmeeyaApi';
 	displayName = 'Askmeeya API';
 	documentationUrl = 'https://github.com/paschembri/n8n-nodes-askmeeya';
+	icon: Icon = 'file:askmeeya.svg';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'API Key',
