@@ -1,10 +1,12 @@
 {
   "name": "n8n-nodes-askmeeya",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Ask Meeya N8N Node",
   "license": "MIT",
   "homepage": "",
-  "keywords": ["n8n-community-node-package"],
+  "keywords": [
+    "n8n-community-node-package"
+  ],
   "author": {
     "name": "Pierre Alexandre SCHEMBRI",
     "email": "pa.schembri@gmail.com"
@@ -22,12 +24,18 @@
     "release": "n8n-node release",
     "prepublishOnly": "n8n-node prerelease"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "n8n": {
     "n8nNodesApiVersion": 1,
     "strict": true,
-    "credentials": ["dist/credentials/AskmeeyaOAuth2Api.credentials.js"],
-    "nodes": ["dist/nodes/Askmeeya/Askmeeya.node.js"]
+    "credentials": [
+      "dist/credentials/AskmeeyaOAuth2Api.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Askmeeya/Askmeeya.node.js"
+    ]
   },
   "devDependencies": {
     "@n8n/node-cli": "*",
@@ -36,5 +44,7 @@
     "release-it": "^19.0.4",
     "typescript": "5.9.2"
   },
-  "peerDependencies": { "n8n-workflow": "*" }
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
 }
