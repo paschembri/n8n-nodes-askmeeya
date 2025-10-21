@@ -1,8 +1,8 @@
 {
   "name": "n8n-nodes-askmeeya",
   "version": "0.1.0",
-  "description": "",
-  "license": "AGPLv3",
+  "description": "Ask Meeya N8N Node",
+  "license": "MIT",
   "homepage": "",
   "keywords": ["n8n-community-node-package"],
   "author": {
