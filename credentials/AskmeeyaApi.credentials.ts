@@ -1,53 +1,86 @@
 import type {
-  IAuthenticateGeneric,
-  ICredentialTestRequest,
-  ICredentialType,
-  INodeProperties,
-  Icon,
+	IAuthenticate,
+	ICredentialTestRequest,
+	ICredentialType,
+	INodeProperties,
 } from 'n8n-workflow';
 
 export class AskmeeyaApi implements ICredentialType {
-  name = 'askmeeyaApi';
-  displayName = 'Askmeeya API';
-  documentationUrl = 'https://github.com/paschembri/n8n-nodes-askmeeya';
-
-  // ✅ Fix: Icon must be an object in your version
-  icon: Icon = {
-    light: 'file:askmeeya.svg',
-    dark: 'file:askmeeya.dark.svg',
-  };
-
-  properties: INodeProperties[] = [
-    {
-      displayName: 'API Key',
-      name: 'apiKey',
-      type: 'string',
-      typeOptions: { password: true },
-      default: '',
-    },
-    {
-      displayName: 'API URL',
-      name: 'apiUrl',
-      type: 'string',
-      default: 'https://staging.meeya.app',
-    },
-  ];
-
-  // Bearer auth
-  authenticate: IAuthenticateGeneric = {
-    type: 'generic',
-    properties: {
-      headers: {
-        Authorization: '=Bearer {{$credentials.apiKey}}',
-      },
-    },
-  };
-
-  test: ICredentialTestRequest = {
-    request: {
-      baseURL: '={{$credentials.apiUrl}}',
-      url: '/auth/',
-      method: 'GET',
-    },
-  };
+	name = 'askmeeyaApi';
+	displayName = 'Askmeeya API';
+	documentationUrl = 'https://github.com/paschembri/n8n-nodes-askmeeya';
+	properties: INodeProperties[] = [
+		{
+			displayName: 'Username',
+			name: 'username',
+			type: 'string',
+			default: '',
+		},
+		{
+			displayName: 'Password',
+			name: 'password',
+			type: 'string',
+			typeOptions: {
+				password: true,
+			},
+			default: '',
+		},
+		{
+			displayName: 'Client ID',
+			name: 'clientId',
+			type: 'string',
+			default: '26ysazLxwvmxD7lt8ZgSpwkJcHHsRw8u',
+		},
+		{
+			displayName: 'Client Secret',
+			name: 'clientSecret',
+			type: 'string',
+			typeOptions: {
+				password: true,
+			},
+			default: '',
+		},
+		{
+			displayName: 'Audience',
+			name: 'audience',
+			type: 'string',
+			default: 'https://staging.meeya.app',
+		},
+		{
+			displayName: 'Auth URL',
+			name: 'authUrl',
+			type: 'string',
+			default: 'https://meeya.eu.auth0.com/oauth/token',
+		},
+		{
+			displayName: 'API URL',
+			name: 'apiUrl',
+			type: 'string',
+			default: 'https://staging.meeya.app',
+		},
+	];
+	authenticate: IAuthenticate = {
+		type: 'oauth2',
+		oauth2: {
+			grantType: 'generic',
+			accessTokenUrl: '={{$credentials.authUrl}}',
+			clientId: '={{$credentials.clientId}}',
+			clientSecret: '={{$credentials.clientSecret}}',
+			scope: 'openid profile email',
+			authMethod: 'body',
+			body: {
+				grant_type: 'http://auth0.com/oauth/grant-type/password-realm',
+				realm: 'Username-Password-Authentication',
+				username: '={{$credentials.username}}',
+				password: '={{$credentials.password}}',
+				audience: '={{$credentials.audience}}',
+			},
+		},
+	};
+	test: ICredentialTestRequest = {
+		request: {
+			baseURL: '={{$credentials.apiUrl}}',
+			url: '/auth/',
+		},
+	};
 }
