@@ -13,28 +13,6 @@ export const documentDescription: INodeProperties[] = [
 		},
 		options: [
 			{
-				name: 'Get Many',
-				value: 'getMany',
-				action: 'Get many documents',
-				routing: {
-					request: {
-						method: 'GET',
-						url: '/api/documents/',
-					},
-				},
-			},
-			{
-				name: 'Get',
-				value: 'get',
-				action: 'Get a document',
-				routing: {
-					request: {
-						method: 'GET',
-						url: '=/api/documents/{{$parameter.documentId}}/',
-					},
-				},
-			},
-			{
 				name: 'Create',
 				value: 'create',
 				action: 'Create a document',
@@ -55,6 +33,42 @@ export const documentDescription: INodeProperties[] = [
 				},
 			},
 			{
+				name: 'Delete',
+				value: 'delete',
+				action: 'Delete a document',
+				routing: {
+					request: {
+						method: 'DELETE',
+						url: '/api/documents/',
+						body: {
+							id: '={{$parameter.documentId}}',
+						},
+					},
+				},
+			},
+			{
+				name: 'Get',
+				value: 'get',
+				action: 'Get a document',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '=/api/documents/{{$parameter.documentId}}/',
+					},
+				},
+			},
+			{
+				name: 'Get Many',
+				value: 'getMany',
+				action: 'Get many documents',
+				routing: {
+					request: {
+						method: 'GET',
+						url: '/api/documents/',
+					},
+				},
+			},
+			{
 				name: 'Update',
 				value: 'update',
 				action: 'Update a document',
@@ -67,20 +81,6 @@ export const documentDescription: INodeProperties[] = [
 							title: '={{$parameter.title}}',
 							archived: '={{$parameter.archived}}',
 							folder: '={{$parameter.folderId}}',
-						},
-					},
-				},
-			},
-			{
-				name: 'Delete',
-				value: 'delete',
-				action: 'Delete a document',
-				routing: {
-					request: {
-						method: 'DELETE',
-						url: '/api/documents/',
-						body: {
-							id: '={{$parameter.documentId}}',
 						},
 					},
 				},

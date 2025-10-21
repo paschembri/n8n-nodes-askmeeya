@@ -1,4 +1,4 @@
-import type { ICredentialType, INodeProperties } from 'n8n-workflow';
+import type { ICredentialType, INodeProperties, Icon } from 'n8n-workflow';
 
 export class AskmeeyaOAuth2Api implements ICredentialType {
 	name = 'askmeeyaOAuth2Api';
@@ -6,6 +6,11 @@ export class AskmeeyaOAuth2Api implements ICredentialType {
 	extends = ['oAuth2Api'];
 
 	displayName = 'Askmeeya OAuth2 API';
+
+	icon: Icon = {
+		light: 'file:askmeeya.svg',
+		dark: 'file:askmeeya.dark.svg',
+	};
 
 	// Link to your community node's README
 	documentationUrl = 'https://github.com/org/-askmeeya?tab=readme-ov-file#credentials';
