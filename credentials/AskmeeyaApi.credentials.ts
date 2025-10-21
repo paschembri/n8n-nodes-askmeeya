@@ -3,12 +3,15 @@ import type {
 	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
+	Icon,
+	IRequestOptionsSimplifiedAuth,
 } from 'n8n-workflow';
 
 export class AskmeeyaApi implements ICredentialType {
 	name = 'askmeeyaApi';
 	displayName = 'Askmeeya API';
 	documentationUrl = 'https://github.com/paschembri/n8n-nodes-askmeeya';
+	icon: Icon = 'file:askmeeya.svg';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'Username',
@@ -60,22 +63,27 @@ export class AskmeeyaApi implements ICredentialType {
 		},
 	];
 	authenticate: IAuthenticate = {
-		type: 'oauth2',
-		oauth2: {
-			grantType: 'generic',
-			accessTokenUrl: '={{$credentials.authUrl}}',
-			clientId: '={{$credentials.clientId}}',
-			clientSecret: '={{$credentials.clientSecret}}',
-			scope: 'openid profile email',
-			authMethod: 'body',
-			body: {
-				grant_type: 'http://auth0.com/oauth/grant-type/password-realm',
-				realm: 'Username-Password-Authentication',
-				username: '={{$credentials.username}}',
-				password: '={{$credentials.password}}',
-				audience: '={{$credentials.audience}}',
+		type: 'generic',
+		properties: {
+			auth: {
+				type: 'oauth2',
+				oauth2: {
+					grantType: 'generic',
+					accessTokenUrl: '={{$credentials.authUrl}}',
+					clientId: '={{$credentials.clientId}}',
+					clientSecret: '={{$credentials.clientSecret}}',
+					scope: 'openid profile email',
+					authMethod: 'body',
+					body: {
+						grant_type: 'http://auth0.com/oauth/grant-type/password-realm',
+						realm: 'Username-Password-Authentication',
+						username: '={{$credentials.username}}',
+						password: '={{$credentials.password}}',
+						audience: '={{$credentials.audience}}',
+					},
+				},
 			},
-		},
+		} as unknown as IRequestOptionsSimplifiedAuth,
 	};
 	test: ICredentialTestRequest = {
 		request: {
