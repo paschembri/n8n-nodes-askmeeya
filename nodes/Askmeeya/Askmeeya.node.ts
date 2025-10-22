@@ -40,6 +40,9 @@ export class Askmeeya implements INodeType {
 				type: 'string',
 				default: '',
 				required: true,
+				typeOptions: {
+					password: true
+				}
 			},
 			{
 				displayName: 'Resource',
