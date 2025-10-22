@@ -37,6 +37,7 @@ export const documentDescription: INodeProperties[] = [
 								const titleParam = this.getNodeParameter('title') as string;
 								const folderId = this.getNodeParameter('folderId');
 								const extractImages = this.getNodeParameter('extractImages') as boolean;
+								const debugRequest = this.getNodeParameter('debugRequest', false) as boolean;
 
 								const item = this.getInputData();
 								const binaryData = item.binary?.[binaryPropertyName];
@@ -80,6 +81,22 @@ export const documentDescription: INodeProperties[] = [
 								delete multipartRequestOptions.body;
 								multipartRequestOptions.json = false;
 								delete multipartRequestOptions.headers?.['Content-Type'];
+
+								if (debugRequest && this.logger) {
+									this.logger.info('Askmeeya document upload payload', {
+										title,
+										folderId,
+										extractImages,
+										binaryPropertyName,
+										hasBinary: Boolean(formData.file),
+									});
+
+									multipartRequestOptions.headers = {
+										...(multipartRequestOptions.headers ?? {}),
+										'X-Debug-Askmeeya-Title': title,
+										'X-Debug-Askmeeya-Binary': binaryPropertyName,
+									};
+								}
 
 								return requestOptions;
 							},
@@ -200,6 +217,20 @@ export const documentDescription: INodeProperties[] = [
 		name: 'extractImages',
 		type: 'boolean',
 		default: false,
+		displayOptions: {
+			show: {
+				resource: ['document'],
+				operation: ['create'],
+			},
+		},
+	},
+	{
+		displayName: 'Debug Request',
+		name: 'debugRequest',
+		type: 'boolean',
+		default: false,
+		description:
+			'Whether to log payload details and add debug headers to help inspect the outbound request',
 		displayOptions: {
 			show: {
 				resource: ['document'],
