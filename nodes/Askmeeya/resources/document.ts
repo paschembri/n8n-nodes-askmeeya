@@ -120,7 +120,7 @@ export const documentDescription: INodeProperties[] = [
 		default: 'data',
 		required: true,
 		description:
-			'Name of the binary property that holds the file to upload, typically "data".',
+			'Name of the binary property that holds the file to upload, typically "data"',
 		displayOptions: {
 			show: {
 				resource: ['document'],
