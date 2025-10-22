@@ -1,4 +1,8 @@
-import type { INodeProperties } from 'n8n-workflow';
+import type {
+	IExecuteSingleFunctions,
+	IHttpRequestOptions,
+	INodeProperties,
+} from 'n8n-workflow';
 
 export const documentDescription: INodeProperties[] = [
 	{
@@ -20,15 +24,61 @@ export const documentDescription: INodeProperties[] = [
 					request: {
 						method: 'POST',
 						url: '/meeya/documents/',
-						headers: {
-							'Content-Type': 'multipart/form-data',
-						},
-						body: {
-							title: '={{$parameter.title}}',
-							file: '={{$binary[$parameter.binaryPropertyName]}}',
-							folder: '={{$parameter.folderId}}',
-							extract_images_required: '={{$parameter.extractImages}}',
-						},
+					},
+					send: {
+						preSend: [
+							async function (
+								this: IExecuteSingleFunctions,
+								requestOptions: IHttpRequestOptions,
+							) {
+								const binaryPropertyName = this.getNodeParameter(
+									'binaryPropertyName',
+								) as string;
+								const title = this.getNodeParameter('title') as string;
+								const folderId = this.getNodeParameter('folderId');
+								const extractImages = this.getNodeParameter('extractImages') as boolean;
+
+								const item = this.getInputData();
+								const binaryData = item.binary?.[binaryPropertyName];
+								if (!binaryData) {
+									throw new Error(
+										`Binary property "${binaryPropertyName}" not found on input item`,
+									);
+								}
+
+								const buffer = await this.helpers.getBinaryDataBuffer(binaryPropertyName);
+
+								type MultipartRequestOptions = IHttpRequestOptions & {
+									formData?: Record<string, unknown>;
+								};
+
+								const multipartRequestOptions = requestOptions as MultipartRequestOptions;
+
+								const formData: Record<string, unknown> = {
+									title,
+									extract_images_required: String(extractImages),
+									file: {
+										value: buffer,
+										options: {
+											filename: binaryData.fileName || 'upload',
+											contentType: binaryData.mimeType || 'application/octet-stream',
+										},
+									},
+								};
+
+								if (folderId !== undefined && folderId !== null) {
+									formData.folder = String(folderId);
+								}
+
+								multipartRequestOptions.formData = formData;
+
+								delete multipartRequestOptions.body;
+								multipartRequestOptions.json = false;
+								delete multipartRequestOptions.headers?.['Content-Type'];
+
+								return requestOptions;
+							},
+						],
 					},
 				},
 			},
