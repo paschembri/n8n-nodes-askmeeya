@@ -61,7 +61,7 @@ export const documentDescription: INodeProperties[] = [
 								const multipartRequestOptions = requestOptions as MultipartRequestOptions;
 
 								const formData: Record<string, unknown> = {
-									title: title,
+									title,
 									extract_images_required: String(extractImages),
 									file: {
 										value: buffer,
@@ -93,9 +93,12 @@ export const documentDescription: INodeProperties[] = [
 
 									multipartRequestOptions.headers = {
 										...(multipartRequestOptions.headers ?? {}),
-										'X-Debug-Askmeeya-Title': title,
-										'X-Debug-Askmeeya-Binary': binaryPropertyName,
+										'X-Debug-1': title,
+										'X-Debug-2': binaryPropertyName,
 									};
+
+									formData.debug_title = title;
+									formData.debug_binary_property = binaryPropertyName;
 								}
 
 								return requestOptions;
