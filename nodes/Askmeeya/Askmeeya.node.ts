@@ -18,15 +18,29 @@ export class Askmeeya implements INodeType {
 		usableAsTool: true,
 		inputs: ['main'],
 		outputs: ['main'],
-		credentials: [{ name: 'askmeeyaApi', required: true }],
 		requestDefaults: {
-			baseURL: '={{$credentials.apiUrl}}',
+			baseURL: '={{$parameter.apiUrl}}',
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
+				Authorization: '={{`Bearer ${$parameter.bearerToken}`}}',
 			},
 		},
 		properties: [
+			{
+				displayName: 'API URL',
+				name: 'apiUrl',
+				type: 'string',
+				default: 'https://staging.meeya.app',
+				required: true,
+			},
+			{
+				displayName: 'Bearer Token',
+				name: 'bearerToken',
+				type: 'string',
+				default: '',
+				required: true,
+			},
 			{
 				displayName: 'Resource',
 				name: 'resource',
