@@ -60,7 +60,7 @@ export const documentDescription: INodeProperties[] = [
 								const multipartRequestOptions = requestOptions as MultipartRequestOptions;
 
 								const formData: Record<string, unknown> = {
-									title,
+									title: title,
 									extract_images_required: String(extractImages),
 									file: {
 										value: buffer,
