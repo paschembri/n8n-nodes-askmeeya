@@ -55,32 +55,76 @@ export const documentDescription: INodeProperties[] = [
 								const buffer = await this.helpers.getBinaryDataBuffer(binaryPropertyName);
 
 								type MultipartRequestOptions = IHttpRequestOptions & {
-									formData?: Record<string, unknown>;
+									headers?: Record<string, string>;
 								};
 
 								const multipartRequestOptions = requestOptions as MultipartRequestOptions;
 
-								const formData: Record<string, unknown> = {
-									title,
-									extract_images_required: String(extractImages),
-									file: {
-										value: buffer,
-										options: {
-											filename: binaryData.fileName || 'upload',
-											contentType: binaryData.mimeType || 'application/octet-stream',
-										},
-									},
-								};
-
-								if (folderId !== undefined && folderId !== null) {
-									formData.folder = String(folderId);
+								interface BinaryChunk {
+									length: number;
 								}
 
-								multipartRequestOptions.formData = formData;
+								interface BufferFactory {
+									from: (data: string, encoding?: string) => BinaryChunk;
+									concat: (chunks: BinaryChunk[]) => BinaryChunk;
+								}
 
-								delete multipartRequestOptions.body;
+								const bufferFactory = (buffer as unknown as {
+									constructor: BufferFactory;
+								}).constructor;
+
+								if (!bufferFactory) {
+									throw new Error('Binary Buffer helper unavailable in runtime environment');
+								}
+
+								const boundary = `askmeeya-${Date.now().toString(16)}`;
+								const crlf = '\r\n';
+
+								const bodyChunks: BinaryChunk[] = [];
+
+								const appendField = (name: string, value: string) => {
+									bodyChunks.push(
+										bufferFactory.from(
+											`--${boundary}${crlf}Content-Disposition: form-data; name="${name}"${crlf}${crlf}${value}${crlf}`,
+											'utf8',
+										),
+									);
+								};
+
+								appendField('title', title);
+								appendField('extract_images_required', String(extractImages));
+
+								if (folderId !== undefined && folderId !== null) {
+									appendField('folder', String(folderId));
+								}
+
+								const fileHeaders = `--${boundary}${crlf}Content-Disposition: form-data; name="file"; filename="${
+									binaryData.fileName || 'upload'
+								}"${crlf}Content-Type: ${
+									binaryData.mimeType || 'application/octet-stream'
+								}${crlf}${crlf}`;
+								bodyChunks.push(bufferFactory.from(fileHeaders, 'utf8'));
+								bodyChunks.push(buffer as unknown as BinaryChunk);
+								bodyChunks.push(bufferFactory.from(crlf, 'utf8'));
+
+								if (debugRequest) {
+									appendField('debug_title', title);
+									appendField('debug_binary_property', binaryPropertyName);
+								}
+
+								bodyChunks.push(
+									bufferFactory.from(`--${boundary}--${crlf}`, 'utf8'),
+								);
+
+								const multipartBody = bufferFactory.concat(bodyChunks);
+
+								multipartRequestOptions.body = multipartBody as unknown as IHttpRequestOptions['body'];
 								multipartRequestOptions.json = false;
-								delete multipartRequestOptions.headers?.['Content-Type'];
+								multipartRequestOptions.headers = {
+									...(multipartRequestOptions.headers ?? {}),
+									'Content-Type': `multipart/form-data; boundary=${boundary}`,
+									'Content-Length': String(multipartBody.length),
+								};
 
 								if (debugRequest && this.logger) {
 									this.logger.info('Askmeeya document upload payload', {
@@ -88,20 +132,15 @@ export const documentDescription: INodeProperties[] = [
 										folderId,
 										extractImages,
 										binaryPropertyName,
-										hasBinary: Boolean(formData.file),
+										fileName: binaryData.fileName,
+										contentType: binaryData.mimeType,
 									});
 
-									multipartRequestOptions.headers = {
-										...(multipartRequestOptions.headers ?? {}),
-										'X-Debug-1': title,
-										'X-Debug-2': binaryPropertyName,
-									};
-
-									formData.debug_title = title;
-									formData.debug_binary_property = binaryPropertyName;
+									multipartRequestOptions.headers['X-Debug-1'] = title;
+									multipartRequestOptions.headers['X-Debug-2'] = binaryPropertyName;
 								}
 
-								return requestOptions;
+								return multipartRequestOptions;
 							},
 						],
 					},
