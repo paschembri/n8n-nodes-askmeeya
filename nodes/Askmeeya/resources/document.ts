@@ -34,7 +34,7 @@ export const documentDescription: INodeProperties[] = [
 								const binaryPropertyName = this.getNodeParameter(
 									'binaryPropertyName',
 								) as string;
-								const title = this.getNodeParameter('title') as string;
+								const titleParam = this.getNodeParameter('title') as string;
 								const folderId = this.getNodeParameter('folderId');
 								const extractImages = this.getNodeParameter('extractImages') as boolean;
 
@@ -45,6 +45,11 @@ export const documentDescription: INodeProperties[] = [
 										`Binary property "${binaryPropertyName}" not found on input item`,
 									);
 								}
+
+								const title =
+									titleParam?.toString().trim() ||
+									binaryData.fileName ||
+									'Untitled document';
 
 								const buffer = await this.helpers.getBinaryDataBuffer(binaryPropertyName);
 
