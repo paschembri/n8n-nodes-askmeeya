@@ -25,7 +25,7 @@ export const documentDescription: INodeProperties[] = [
 						},
 						body: {
 							title: '={{$parameter.title}}',
-							file: '={{$binary.file}}',
+							file: '={{$binary[$parameter.binaryPropertyName]}}',
 							folder: '={{$parameter.folderId}}',
 							extract_images_required: '={{$parameter.extractImages}}',
 						},
@@ -114,10 +114,13 @@ export const documentDescription: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: 'File',
-		name: 'file',
+		displayName: 'Binary Property',
+		name: 'binaryPropertyName',
 		type: 'string',
-		default: '',
+		default: 'data',
+		required: true,
+		description:
+			'Name of the binary property that holds the file to upload, typically "data".',
 		displayOptions: {
 			show: {
 				resource: ['document'],
